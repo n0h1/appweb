@@ -1,0 +1,285 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>techfood</title>
+<link rel="stylesheet" href="project.css">
+<script src="alljs.js"></script>
+
+<style>
+  /* CSS styles for the cart */
+  #cart {
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  #cart ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  #cart li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+  }
+  #cart li img {
+    margin-right: 10px;
+  }
+  #cart li span {
+    margin-right: 10px;
+  }
+</style>
+
+</head> 
+
+<body>
+
+<header>
+  <button id="theme-toggle">*theme*</button>
+  <a href="Home_Page.html"><img src="image/Tech.png" id="logo" alt="logo" width="180" height="180"></a> 
+  <h1 id="cart_Page">cart</h1>
+  <div id='navigation'>
+    <p><a href="Owner's_Dashboard.html">Owner's Dashboard</a> | <a href="Restrants.html">Customer's Dashboard</a> | <a href="ResturantPage.html">Current Restaurants</a></p>
+  </div>
+  <div id="breadcrumb">
+    <p><a href="Home_Page.html">Home Page</a> > <a href="ResturantPage.html">Restaurant</a> > <a href="cart_page.html">Cart</a></p>
+  </div>
+</header>  
+
+<main>
+  <div id="fristborde">
+    <h2>Cart</h2><hr>
+    <ul id="cart-items">
+      <!-- Your existing cart items will be listed here -->
+    </ul>
+    <button class="prodects" onclick="clearCart()">Clear cart</button>
+  </div>
+  <pre></pre>
+  <div id="secondborder">
+    <h2>Order Summary</h2><hr>
+    <p>Total quantity: <span id="total-quantity">0</span></p>
+    <p>Total price: $<span id="total-price">0.00</span></p>
+    <button onclick="checkout()" class="checkout">Check Out</button>
+    <a href="ResturantEval.html"><button class="checkout">Checkout</button> </a>
+
+  </div>
+</main>
+
+<footer>
+  <h3>Contact Info:</h3>
+  <div id="contact">
+    <p>Phone Number: 05xxxxxxxxx</p>
+    <p>Email: TechFood@hotmail.com</p>
+    <img src="image/youtube.webp" class="icon" alt="YouTube" width="35" height="35">
+    <img src="image/xx.PNG" class="icon" alt="X" width="35" height="25">
+    <img src="image/insta.webp" class="icon" alt="Instagram" width="35" height="35">
+    <img src="image/Facebook.PNG" class="icon" alt="Facebook" width="38" height="40">
+    <img src="image/linkedIn.PNG" class="icon" alt="LinkedIn" width="38" height="40">
+  </div>
+  <p id="copy">&copy; 2024 Techfood</p>
+</footer>
+
+<script>
+  // JavaScript functions for the shopping cart functionality
+
+  var cart = []; // Array to store cart items
+
+  function addToCart(itemName, price, imageSrc) {
+    var index = cart.findIndex(item => item.name === itemName); // Check if item is already in cart
+    if (index !== -1) {
+      // If item is already in cart, increase quantity
+      cart[index].quantity++;
+    } else {
+      // If item is not in cart, add it with quantity 1
+      cart.push({ name: itemName, price: price, quantity: 1, image: imageSrc });
+    }
+    updateCart();
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1); // Remove item from cart array
+    updateCart();
+  }
+
+  function updateCart() {
+    var cartList = document.getElementById("cart-items");
+    var totalQuantity = 0;
+    var totalPrice = 0;
+
+    // Clear previous cart items
+    cartList.innerHTML = "";
+
+    // Add items to cart list
+    cart.forEach(function(item, index) {
+      var li = document.createElement("li");
+      li.innerHTML = '<img src="' + item.image + '" alt="' + item.name + '" width="50" height="50">' +
+                     '<span>' + item.name + '</span>' +
+                     '<span>$' + item.price.toFixed(2) + '</span>' +
+                     '<button onclick="decreaseQuantity(' + index + ')">-</button>' +
+                     '<span>' + item.quantity + '</span>' +
+                     '<button onclick="increaseQuantity(' + index + ')">+</button>' +
+                     '<button onclick="removeFromCart(' + index + ')">Remove</button>';
+      cartList.appendChild(li);
+
+      totalQuantity += item.quantity;
+      totalPrice += item.price * item.quantity;
+    });
+
+    // Update total quantity and price
+    document.getElementById("total-quantity").textContent = totalQuantity;
+    document.getElementById("total-price").textContent = totalPrice.toFixed(2);
+  }
+
+  function clearCart() {
+    cart = []; // Clear cart array
+    updateCart();
+  }
+
+  function checkout() {
+    var totalPrice = parseFloat(document.getElementById("total-price").textContent);
+    alert("Total cost: $" + totalPrice.toFixed(2));
+    // Redirect to checkout page or perform other actions...
+  }
+
+  // Function to increase quantity
+  function increaseQuantity(index) {
+    cart[index].quantity++;
+    updateCart();
+  }
+
+  // Function to decrease quantity
+  function decreaseQuantity(index) {
+    if (cart[index].quantity > 1) {
+      cart[index].quantity--;
+      updateCart();
+    }
+  }
+
+  // Sample function to add items to cart (you can integrate this with your existing buttons)
+  function addSampleItems() {
+    addToCart("Meal A", 20.00, "image/salad22.jpg");
+    addToCart("Meal B", 30.00, "image/cha.jpg");
+    addToCart("Meal C", 10.00, "image/OIP.jpg");
+  }
+
+  // Add sample items to cart (you can remove this in production)
+  addSampleItems();
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || {};
+      const table = document.querySelector('table tbody');
+  
+      // Function to update cart display
+      function updateCartDisplay() {
+          table.innerHTML = ''; // Clear existing entries
+          let totalQuantity = 0;
+          let totalPrice = 0;
+  
+          Object.keys(cart).forEach(itemName => {
+              const quantity = cart[itemName];
+              totalQuantity += quantity;
+              // Assuming you have a way to get the price, here it's just an example
+              const price = 20; // Example price
+              totalPrice += price * quantity;
+  
+              // Create row for each item
+              const row = `<tr>
+                  <td>${itemName}</td>
+                  <td>${price}</td>
+                  <td>${quantity}</td>
+                  <td>$${(price * quantity).toFixed(2)}</td>
+              </tr>`;
+              table.innerHTML += row;
+          });
+  
+          // Update total quantity and price
+          document.querySelector('#total-quantity').innerText = totalQuantity;
+          document.querySelector('#total-price').innerText = `$${totalPrice.toFixed(2)}`;
+      }
+  
+      updateCartDisplay(); // Update cart display on page load
+  
+      // Event listeners for quantity buttons would go here, similar to the restaurant page
+  });
+
+
+
+  
+
+
+  // Function to update cart display on the cart page
+function updateCartDisplay() {
+  const cart = getCart(); // Get the cart from local storage
+  const cartItemsContainer = document.getElementById('cart-items');
+  cartItemsContainer.innerHTML = ''; // Clear previous cart items
+  let totalQuantity = 0;
+  let totalPrice = 0;
+
+  Object.keys(cart).forEach(key => {
+    const item = cart[key];
+    const li = document.createElement('li');
+    li.innerHTML = `<img src="${item.image}" alt="${item.name}" width="50" height="50">
+                    <span>${item.name}</span> - 
+                    <span>Quantity: ${item.quantity}</span> -
+                    <span>Price: $${item.price.toFixed(2)}</span>`;
+    cartItemsContainer.appendChild(li);
+    totalQuantity += item.quantity;
+    totalPrice += item.price * item.quantity;
+  });
+
+  document.getElementById('total-quantity').textContent = totalQuantity;
+  document.getElementById('total-price').textContent = totalPrice.toFixed(2);
+}
+
+// Make sure this function runs every time the cart page is loaded
+document.addEventListener('DOMContentLoaded', updateCartDisplay);
+
+  </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    updateCartDisplay();
+
+    function updateCartDisplay() {
+        const cart = getCart();
+        const cartItemsContainer = document.getElementById('cart-items');
+        cartItemsContainer.innerHTML = '';  // Clear existing items
+        let totalQuantity = 0;
+        let totalPrice = 0;
+
+        Object.entries(cart).forEach(([key, item]) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<img src="${item.image}" alt="${key}" width="50" height="50">` +
+                           `<span>${key}</span> - ` +
+                           `Quantity: ${item.quantity} - ` +
+                           `Price: $${(item.price * item.quantity).toFixed(2)}`;
+            cartItemsContainer.appendChild(li);
+            totalQuantity += item.quantity;
+            totalPrice += item.price * item.quantity;
+        });
+
+        document.getElementById('total-quantity').textContent = totalQuantity;
+        document.getElementById('total-price').textContent = `$${totalPrice.toFixed(2)}`;
+    }
+
+    function getCart() {
+        return JSON.parse(localStorage.getItem('cart')) || {};
+    }
+
+    function clearCart() {
+        localStorage.clear();
+        updateCartDisplay();
+    }
+});
+
+  </script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TechFood</title>
+    <link rel="stylesheet" href="project.css">
+  
+    <script src="alljs.js"></script>
+</head>
+
+<body>
+    <header>
+        <button id="theme-toggle">*theme*</button>
+        <a href="Home_Page.html"><img src="image/Tech.png" id="logo" alt="logo" width="180" height="180"></a>
+        <h1 id="OwnerDash">Owner's Dashboard</h1>
+        <div id='navigation'>
+            <p><a href="Owner's_Dashboard.html">Owner's_Dashboard</a> | <a href="Restrants.html">Customer's_Dashboard</a> | <a href="ResturantPage.html">Current Restaurants</a></p>
+        </div>
+        <div id="breadcrumb">
+            <p><a href="Home_Page.html">Home Page</a> > <a href="Owner's_Dashboard.html">Owner's_Dashboard</a></p>
+        </div>
+    </header>
+
+    <main>
+        <h2 class="O_meal">Restaurant's Meals</h2>
+        <div id="OwnerMeals"></div>
+        
+        <div id='sidebar'>
+            <p><a href="New_Cuisine.html">Add New Cuisine</a> | <a href="Make_Delete_Offers.html">Make/Delete Offers</a></p>
+        </div>
+    </main>
+
+    <footer>
+        <h3>Contact Info :</h3>
+        <div id="contact">
+            <p>Phone Number: 05xxxxxxxxx</p>
+            <p>Email: TechFood@hotmail.com</p>
+            <img src="image/youtube.webp" class="icon" alt="youtube" width="35" height="35">
+            <img src="image/xx.PNG" class="icon" alt="X" width="35" height="25">
+            <img src="image/insta.webp" class="icon" alt="Instagram" width="35" height="35">
+            <img src="image/Facebook.PNG" class="icon" alt="Facebook" width="38" height="40">
+            <img src="image/linkedIn.PNG" class="icon" alt="LinkedIn" width="38" height="40">
+        </div>
+        <p id="copy">&copy; 2024 Techfood</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          
+            const meals = JSON.parse(localStorage.getItem('meals')) || [];
+
+           
+            const ownerMeals = document.getElementById('OwnerMeals');
+            ownerMeals.innerHTML = '';
+
+            meals.forEach(function(meal) {
+                const mealDiv = document.createElement('div');
+                mealDiv.classList.add('scrollMeals');
+
+                mealDiv.innerHTML = `
+                    <h3>${meal.name}</h3>
+                    <img src="${meal.photo}" alt="${meal.name}" width="200" height="200">
+                    <p>Price: ${meal.price}</p>
+                    <p>Calories: ${meal.calories} Cal</p>
+                    <p>${meal.description}</p>
+                `;
+
+                ownerMeals.appendChild(mealDiv);
+            });
+        });
+    </script>
+</body>
+
+</html>

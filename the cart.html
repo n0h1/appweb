@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>techfood</title>
+<link rel="stylesheet" href="project.css">
+<script src="alljs.js"></script>
+
+<style>
+  /* CSS styles for the cart */
+  #cart {
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  #cart ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  #cart li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+  }
+  #cart li img {
+    margin-right: 10px;
+  }
+  #cart li span {
+    margin-right: 10px;
+  }
+</style>
+
+</head> 
+
+<body>
+
+<header>
+  <a href="Home_Page.html"><img src="image/Tech.png" id="logo" alt="logo" width="180" height="180"></a> 
+  <button id="theme-toggle">*theme*</button>
+
+  <h1 id="cart_Page">cart</h1>
+  <div id='navigation'>
+    <p><a href="Owner's_Dashboard.html">Owner's Dashboard</a> | <a href="Restrants.html">Customer's Dashboard</a> | <a href="ResturantPage.html">Current Restaurants</a></p>
+  </div>
+  <div id="breadcrumb">
+    <p><a href="Home_Page.html">Home Page</a> > <a href="ResturantPage.html">Restaurant</a> > <a href="cart_page.html">Cart</a></p>
+  </div>
+</header>  
+
+<main>
+  <div id="fristborde">
+    <h2>Cart</h2><hr>
+    <ul id="cart-items">
+      <!-- Your existing cart items will be listed here -->
+    </ul>
+    <button class="prodects" onclick="clearCart()">Clear cart</button>
+  </div>
+  <pre></pre>
+  <div id="secondborder">
+    <h2>Order Summary</h2><hr>
+    <p>Total quantity: <span id="total-quantity">0</span></p>
+    <p>Total price: $<span id="total-price">0.00</span></p>
+    <button onclick="checkout()" class="checkout">Check Out</button>
+  </div>
+</main>
+
+<footer>
+  <h3>Contact Info:</h3>
+  <div id="contact">
+    <p>Phone Number: 05xxxxxxxxx</p>
+    <p>Email: TechFood@hotmail.com</p>
+    <img src="image/youtube.webp" class="icon" alt="YouTube" width="35" height="35">
+    <img src="image/xx.PNG" class="icon" alt="X" width="35" height="25">
+    <img src="image/insta.webp" class="icon" alt="Instagram" width="35" height="35">
+    <img src="image/Facebook.PNG" class="icon" alt="Facebook" width="38" height="40">
+    <img src="image/linkedIn.PNG" class="icon" alt="LinkedIn" width="38" height="40">
+  </div>
+  <p id="copy">&copy; 2024 Techfood</p>
+</footer>
+
+<script>
+  // JavaScript functions for the shopping cart functionality
+
+  var cart = []; // Array to store cart items
+
+  function addToCart(itemName, price, imageSrc) {
+    var index = cart.findIndex(item => item.name === itemName); // Check if item is already in cart
+    if (index !== -1) {
+      // If item is already in cart, increase quantity
+      cart[index].quantity++;
+    } else {
+      // If item is not in cart, add it with quantity 1
+      cart.push({ name: itemName, price: price, quantity: 1, image: imageSrc });
+    }
+    updateCart();
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1); // Remove item from cart array
+    updateCart();
+  }
+
+  function updateCart() {
+    var cartList = document.getElementById("cart-items");
+    var totalQuantity = 0;
+    var totalPrice = 0;
+
+    // Clear previous cart items
+    cartList.innerHTML = "";
+
+    // Add items to cart list
+    cart.forEach(function(item, index) {
+      var li = document.createElement("li");
+      li.innerHTML = '<img src="' + item.image + '" alt="' + item.name + '" width="50" height="50">' +
+                     '<span>' + item.name + '</span>' +
+                     '<span>$' + item.price.toFixed(2) + '</span>' +
+                     '<button onclick="decreaseQuantity(' + index + ')">-</button>' +
+                     '<span>' + item.quantity + '</span>' +
+                     '<button onclick="increaseQuantity(' + index + ')">+</button>' +
+                     '<button onclick="removeFromCart(' + index + ')">Remove</button>';
+      cartList.appendChild(li);
+
+      totalQuantity += item.quantity;
+      totalPrice += item.price * item.quantity;
+    });
+
+    // Update total quantity and price
+    document.getElementById("total-quantity").textContent = totalQuantity;
+    document.getElementById("total-price").textContent = totalPrice.toFixed(2);
+  }
+
+  function clearCart() {
+    cart = []; // Clear cart array
+    updateCart();
+  }
+
+  function checkout() {
+    var totalPrice = parseFloat(document.getElementById("total-price").textContent);
+    alert("Total cost: $" + totalPrice.toFixed(2));
+    // Redirect to checkout page or perform other actions...
+  }
+
+  // Function to increase quantity
+  function increaseQuantity(index) {
+    cart[index].quantity++;
+    updateCart();
+  }
+
+  // Function to decrease quantity
+  function decreaseQuantity(index) {
+    if (cart[index].quantity > 1) {
+      cart[index].quantity--;
+      updateCart();
+    }
+  }
+
+  // Sample function to add items to cart (you can integrate this with your existing buttons)
+  function addSampleItems() {
+    addToCart("Meal A", 20.00, "image/salad22.jpg");
+    addToCart("Meal B", 30.00, "image/cha.jpg");
+    addToCart("Meal C", 10.00, "image/OIP.jpg");
+  }
+
+  // Add sample items to cart (you can remove this in production)
+  addSampleItems();
+</script>
+
+</body>
+</html>
